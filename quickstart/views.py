@@ -1,12 +1,42 @@
 from pprint import pprint
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Inventory
+from .models import Cosmeticsshortname
+from rest_framework import generics
+from .serializers import DetailCosmeticsshortnameSerializer,CosmeticsshortnameSerializer
 
-class TestView(APIView):
-    def get(self,request, *args, **kwargs):
-        result = Inventory.objects.all().values()
-        pprint(type(result  ))
-        pprint(f'{result=}')
-        return Response({'result': result})
+class ListCosmeticsshortnameView(generics.ListAPIView):  
+    serializer_class = DetailCosmeticsshortnameSerializer
+
+    def get_queryset(self): 
+        response = Cosmeticsshortname.objects.all().order_by("-id")
+        return response 
+
+class CosmeticsshortnameCreate(generics.CreateAPIView):
+    queryset = Cosmeticsshortname.objects.all()
+    serializer_class = CosmeticsshortnameSerializer
+
+class DetailCosmeticsshortnameView(generics.RetrieveUpdateAPIView):
+    serializer_class = DetailCosmeticsshortnameSerializer
+    http_method_names = ['patch','get']
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Cosmeticsshortname.objects.filter(id=self.kwargs["pk"])
+        return qs
+    
+    def patch(self,request, *args, **kwargs):
+        base_response = super(DetailCosmeticsshortnameView, self).patch(request, *args, **kwargs)
+        return base_response
+
+
+class DestoryCosmeticsshortnameView(generics.DestroyAPIView):
+    serializer_class = DetailCosmeticsshortnameSerializer
+
+    def delete(self, request, *args, **kwargs):
+        base_response = super(DestoryCosmeticsshortnameView, self).delete(request, *args, **kwargs)
+        msg = 'Cosmeticsshortname deleted successfully'
+        return Response(msg)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Cosmeticsshortname.objects.all()
+        return qs

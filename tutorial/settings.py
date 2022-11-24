@@ -88,10 +88,10 @@ DATABASES = {
     # }
     "default": {
         "ENGINE": "mssql",
-        "NAME": "TestDB",
-        "USER": "SA",
-        "PASSWORD": "<YourStrong@Passw0rd>",
-        "HOST": "localhost",
+        "NAME": "EDA6py",
+        "USER": "pyuser",
+        "PASSWORD": "otusrP0rdpY$",
+        "HOST": "10.10.10.21",
         "PORT": "1433",
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server", 

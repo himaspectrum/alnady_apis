@@ -8,14 +8,96 @@
 from django.db import models
 
 
-class Inventory(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50, blank=True, null=True)
-    quantity = models.IntegerField(blank=True, null=True)
+class Cosmeticsshortname(models.Model):
+    tradecode = models.IntegerField(db_column='TradeCode', blank=True, null=True)  # Field name made lowercase.
+    shorttradename = models.CharField(db_column='ShortTradeName', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    company_code = models.IntegerField(db_column='Company_code', blank=True, null=True)  # Field name made lowercase.
+    trade_name = models.CharField(db_column='Trade_name', max_length=1500, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'Inventory'
+        db_table = 'CosmeticsShortName'
+
+
+
+class Tempcompany(models.Model):
+    company_code = models.IntegerField(db_column='Company_code')  # Field name made lowercase.
+    arabicname = models.CharField(db_column='ArabicName', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    englishname = models.CharField(db_column='EnglishName', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    licensetypecode = models.DecimalField(db_column='LicenseTypeCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    licensetype = models.CharField(db_column='LicenseType', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    companytypecode = models.DecimalField(db_column='CompanyTypeCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    companytype = models.CharField(db_column='CompanyType', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    companystatus = models.CharField(db_column='CompanyStatus', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'TempCompany'
+
+
+class Tempdrug(models.Model):
+    tradecode = models.DecimalField(db_column='TradeCode', primary_key=True, max_digits=12, decimal_places=0)  # Field name made lowercase.
+    regno = models.CharField(db_column='RegNo', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    productname = models.CharField(db_column='ProductName', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    license_type_code = models.DecimalField(db_column='License_type_code', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    license_type = models.CharField(db_column='License_type', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    licensestatuscode = models.DecimalField(db_column='LicenseStatusCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    licensestatus = models.CharField(db_column='LicenseStatus', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    dosage_formcode = models.DecimalField(db_column='Dosage_formCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    dosage_form = models.CharField(db_column='Dosage_form', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    shelflife = models.DecimalField(db_column='ShelfLife', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    markettypecode = models.DecimalField(db_column='MarketTypeCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    markettype = models.CharField(db_column='MarketType', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    licflagcode = models.DecimalField(db_column='LicFlagCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    licflag = models.CharField(db_column='LicFlag', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    approvenamea = models.CharField(db_column='ApproveNameA', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    manufcode = models.DecimalField(db_column='ManufCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    manuf = models.CharField(db_column='Manuf', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    company_code = models.DecimalField(db_column='Company_code', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    legacystatus = models.DecimalField(db_column='LegacyStatus', max_digits=1, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    drug_registration_date = models.DateTimeField(db_column='Drug_registration_date', blank=True, null=True)  # Field name made lowercase.
+    drug_registration_expiration_date = models.DateTimeField(db_column='Drug_registration_expiration_date', blank=True, null=True)  # Field name made lowercase.
+    company_profile_id = models.DecimalField(db_column='COMPANY_PROFILE_ID', max_digits=8, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    manufcountryid = models.DecimalField(db_column='ManufCountryID', max_digits=8, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    manufcountry = models.CharField(db_column='ManufCountry', max_length=350, blank=True, null=True)  # Field name made lowercase.
+    license_holder_company_id = models.DecimalField(db_column='LICENSE_HOLDER_COMPANY_ID', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    license_holder_company = models.CharField(db_column='LICENSE_HOLDER_COMPANY', max_length=350, blank=True, null=True)  # Field name made lowercase.
+    license_holder_country_id = models.DecimalField(db_column='LICENSE_HOLDER_COUNTRY_ID', max_digits=8, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    license_holder_country = models.CharField(db_column='LICENSE_HOLDER_COUNTRY', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    f_added = models.BooleanField(db_column='F_ADDED', blank=True, null=True)  # Field name made lowercase.
+    shortname = models.CharField(db_column='ShortName', max_length=100, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'TempDrug'
+
+
+class Tempdrugsmanufacture(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    parent = models.ForeignKey(Tempdrug, models.DO_NOTHING, db_column='PARENT_ID', blank=True, null=True)  # Field name made lowercase.
+    manufcode = models.IntegerField(db_column='ManufCode', blank=True, null=True)  # Field name made lowercase.
+    manuf = models.CharField(db_column='Manuf', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    manufcountryid = models.IntegerField(db_column='ManufCountryID', blank=True, null=True)  # Field name made lowercase.
+    manufcountry = models.CharField(db_column='ManufCountry', max_length=70, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'TempDrugsManufacture'
+
+
+class Vacation(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    vacation_date = models.DateTimeField(db_column='VACATION_DATE')  # Field name made lowercase.
+    vacation_desc = models.TextField(db_column='VACATION_DESC', blank=True, null=True)  # Field name made lowercase.
+    created_by = models.DecimalField(db_column='CREATED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    created_date = models.DateTimeField(db_column='CREATED_DATE', blank=True, null=True)  # Field name made lowercase.
+    modified_by = models.DecimalField(db_column='MODIFIED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    modified_date = models.DateTimeField(db_column='MODIFIED_DATE', blank=True, null=True)  # Field name made lowercase.
+    f_delete = models.BooleanField(db_column='F_DELETE', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'VACATION'
 
 
 class AuthGroup(models.Model):
@@ -130,3 +212,16 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+class Sysdiagrams(models.Model):
+    name = models.CharField(max_length=128)
+    principal_id = models.IntegerField()
+    diagram_id = models.AutoField(primary_key=True)
+    version = models.IntegerField(blank=True, null=True)
+    definition = models.BinaryField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'sysdiagrams'
+        unique_together = (('principal_id', 'name'),)
