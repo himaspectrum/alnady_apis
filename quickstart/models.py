@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Cosmeticsshortname(models.Model):
-    tradecode = models.IntegerField(db_column='TradeCode', blank=True, null=True)  # Field name made lowercase.
+    tradecode = models.IntegerField(db_column='TradeCode',primary_key=True)  # Field name made lowercase.
     shorttradename = models.CharField(db_column='ShortTradeName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     company_code = models.IntegerField(db_column='Company_code', blank=True, null=True)  # Field name made lowercase.
     trade_name = models.CharField(db_column='Trade_name', max_length=1500, blank=True, null=True)  # Field name made lowercase.

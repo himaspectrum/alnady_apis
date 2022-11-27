@@ -9,7 +9,7 @@ class ListCosmeticsshortnameView(generics.ListAPIView):
     serializer_class = DetailCosmeticsshortnameSerializer
 
     def get_queryset(self): 
-        response = Cosmeticsshortname.objects.all().order_by("-id")
+        response = Cosmeticsshortname.objects.all()
         return response 
 
 class CosmeticsshortnameCreate(generics.CreateAPIView):
