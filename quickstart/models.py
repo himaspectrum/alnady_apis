@@ -277,7 +277,7 @@ class Product(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'PRODUCT'
+        db_table = 'COSM].[PRODUCT'
 
 class ProductDetails(models.Model):
     id = models.DecimalField(db_column='ID', max_digits=12, decimal_places=0,primary_key=True)  # Field name made lowercase.
@@ -296,4 +296,4 @@ class ProductDetails(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'PRODUCT_DETAILS'
+        db_table = 'COSM].[PRODUCT_DETAILS'

@@ -8,9 +8,8 @@ class ListProductSerializer(generics.ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self): 
-        Product = next((m for m in apps.get_models() if m._meta.db_table=='PRODUCT'), None)
-        # pprint(model)
-        response = Product.objects.all().order_by('id')
+        # Product = next((m for m in apps.get_models() if m._meta.db_table=='PRODUCT'), None)
+        response = Product.objects.all()
         return response 
 
 # class DetailCosmeticsshortnameView(generics.RetrieveUpdateAPIView):
