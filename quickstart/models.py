@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Cosmeticsshortname(models.Model):
-    tradecode = models.IntegerField(db_column='TradeCode',primary_key=True)  # Field name made lowercase.
+    tradecode = models.IntegerField(db_column='TradeCode', blank=True, null=True)  # Field name made lowercase.
     shorttradename = models.CharField(db_column='ShortTradeName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     company_code = models.IntegerField(db_column='Company_code', blank=True, null=True)  # Field name made lowercase.
     trade_name = models.CharField(db_column='Trade_name', max_length=1500, blank=True, null=True)  # Field name made lowercase.
@@ -19,9 +19,8 @@ class Cosmeticsshortname(models.Model):
         db_table = 'CosmeticsShortName'
 
 
-
 class Tempcompany(models.Model):
-    company_code = models.IntegerField(db_column='Company_code')  # Field name made lowercase.
+    company_code = models.AutoField(db_column='Company_code',primary_key=True)  # Field name made lowercase.
     arabicname = models.CharField(db_column='ArabicName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     englishname = models.CharField(db_column='EnglishName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     licensetypecode = models.DecimalField(db_column='LicenseTypeCode', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
@@ -114,10 +113,10 @@ class AuthGroupPermissions(models.Model):
     permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
 
     class Meta:
+
         managed = False
         db_table = 'auth_group_permissions'
         unique_together = (('group', 'permission'),)
-
 
 class AuthPermission(models.Model):
     name = models.CharField(max_length=255)
@@ -225,3 +224,76 @@ class Sysdiagrams(models.Model):
         managed = False
         db_table = 'sysdiagrams'
         unique_together = (('principal_id', 'name'),)
+
+
+class Product(models.Model):
+    id = models.DecimalField(db_column='ID', max_digits=12, decimal_places=0,primary_key=True)  # Field name made lowercase.
+    old_product_id = models.DecimalField(db_column='OLD_PRODUCT_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    old_reg_no = models.DecimalField(db_column='OLD_REG_NO', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    notification_no = models.CharField(db_column='NOTIFICATION_NO', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    notification_date = models.DateTimeField(db_column='NOTIFICATION_DATE', blank=True, null=True)  # Field name made lowercase.
+    re_notification_date = models.DateTimeField(db_column='RE_NOTIFICATION_DATE', blank=True, null=True)  # Field name made lowercase.
+    product_type_id = models.DecimalField(db_column='PRODUCT_TYPE_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    arabic_name = models.CharField(db_column='ARABIC_NAME', max_length=1500, blank=True, null=True)  # Field name made lowercase.
+    english_name = models.CharField(db_column='ENGLISH_NAME', max_length=1500, blank=True, null=True)  # Field name made lowercase.
+    short_name = models.CharField(db_column='SHORT_NAME', max_length=150, blank=True, null=True)  # Field name made lowercase.
+    registration_type_id = models.DecimalField(db_column='REGISTRATION_TYPE_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    company_profile_id = models.DecimalField(db_column='COMPANY_PROFILE_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    manufacturing_company_id = models.DecimalField(db_column='MANUFACTURING_COMPANY_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    manufacturing_country_id = models.DecimalField(db_column='MANUFACTURING_COUNTRY_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    applicant_id = models.DecimalField(db_column='APPLICANT_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    license_holder_id = models.DecimalField(db_column='LICENSE_HOLDER_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    license_holder_other = models.CharField(db_column='LICENSE_HOLDER_OTHER', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    license_holder_country_id = models.DecimalField(db_column='LICENSE_HOLDER_COUNTRY_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    trade_mark = models.CharField(db_column='TRADE_MARK', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    physical_state_id = models.DecimalField(db_column='PHYSICAL_STATE_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    physical_state_other = models.CharField(db_column='PHYSICAL_STATE_OTHER', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    colour_id = models.DecimalField(db_column='COLOUR_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    use_purpose_id = models.DecimalField(db_column='USE_PURPOSE_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    purpose_of_use_other = models.CharField(db_column='PURPOSE_OF_USE_OTHER', max_length=300, blank=True, null=True)  # Field name made lowercase.
+    storage_place_id = models.DecimalField(db_column='STORAGE_PLACE_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    shelf_life = models.DecimalField(db_column='SHELF_LIFE', max_digits=3, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    expiration_date = models.DateTimeField(db_column='EXPIRATION_DATE', blank=True, null=True)  # Field name made lowercase.
+    appworks_id = models.CharField(db_column='APPWORKS_ID', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    appworks_guid = models.CharField(db_column='APPWORKS_GUID', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    f_expired = models.BooleanField(db_column='F_EXPIRED', blank=True, null=True)  # Field name made lowercase.
+    f_confirmed = models.BooleanField(db_column='F_CONFIRMED', blank=True, null=True)  # Field name made lowercase.
+    f_draft = models.BooleanField(db_column='F_DRAFT', blank=True, null=True)  # Field name made lowercase.
+    f_kit = models.BooleanField(db_column='F_KIT', blank=True, null=True)  # Field name made lowercase.
+    f_export_only = models.BooleanField(db_column='F_EXPORT_ONLY', blank=True, null=True)  # Field name made lowercase.
+    f_flag = models.BooleanField(db_column='F_FLAG', blank=True, null=True)  # Field name made lowercase.
+    f_flag_lab = models.BooleanField(db_column='F_FLAG_LAB', blank=True, null=True)  # Field name made lowercase.
+    f_hold = models.BooleanField(db_column='F_HOLD', blank=True, null=True)  # Field name made lowercase.
+    f_hold_lab = models.BooleanField(db_column='F_HOLD_LAB', blank=True, null=True)  # Field name made lowercase.
+    f_block = models.BooleanField(db_column='F_BLOCK', blank=True, null=True)  # Field name made lowercase.
+    comments = models.CharField(db_column='COMMENTS', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    created_by = models.DecimalField(db_column='CREATED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    created_date = models.DateTimeField(db_column='CREATED_DATE', blank=True, null=True)  # Field name made lowercase.
+    modified_by = models.DecimalField(db_column='MODIFIED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    modified_date = models.DateTimeField(db_column='MODIFIED_DATE', blank=True, null=True)  # Field name made lowercase.
+    f_delete = models.BooleanField(db_column='F_DELETE', blank=True, null=True)  # Field name made lowercase.
+    f_inprocess = models.BooleanField(db_column='F_INPROCESS', blank=True, null=True)  # Field name made lowercase.
+    license_holder_syskey = models.DecimalField(db_column='LICENSE_HOLDER_syskey', max_digits=8, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'PRODUCT'
+
+class ProductDetails(models.Model):
+    id = models.DecimalField(db_column='ID', max_digits=12, decimal_places=0,primary_key=True)  # Field name made lowercase.
+    product_id = models.DecimalField(db_column='PRODUCT_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    product_colour = models.CharField(db_column='PRODUCT_COLOUR', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    fragrance = models.CharField(db_column='FRAGRANCE', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    flavor = models.CharField(db_column='FLAVOR', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    barcode = models.CharField(db_column='BARCODE', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    appworks_id = models.CharField(db_column='APPWORKS_ID', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    appworks_guid = models.CharField(db_column='APPWORKS_GUID', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    modified_by = models.DecimalField(db_column='MODIFIED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    modified_date = models.DateTimeField(db_column='MODIFIED_DATE', blank=True, null=True)  # Field name made lowercase.
+    created_by = models.DecimalField(db_column='CREATED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    created_date = models.DateTimeField(db_column='CREATED_DATE', blank=True, null=True)  # Field name made lowercase.
+    f_delete = models.BooleanField(db_column='F_DELETE', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'PRODUCT_DETAILS'

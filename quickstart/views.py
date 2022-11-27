@@ -1,43 +1,26 @@
 from pprint import pprint
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .models import Cosmeticsshortname
+from .models import Product,Tempdrugsmanufacture
 from rest_framework import generics
-from .serializers import DetailCosmeticsshortnameSerializer,CosmeticsshortnameSerializer
+from .serializers import ProductSerializer
+from django.apps import apps
 
-class ListCosmeticsshortnameView(generics.ListAPIView):  
-    serializer_class = DetailCosmeticsshortnameSerializer
+class ListProductSerializer(generics.ListAPIView):  
+    serializer_class = ProductSerializer
 
     def get_queryset(self): 
-        response = Cosmeticsshortname.objects.all()
+        Product = next((m for m in apps.get_models() if m._meta.db_table=='PRODUCT'), None)
+        # pprint(model)
+        response = Product.objects.all().order_by('id')
         return response 
 
-class CosmeticsshortnameCreate(generics.CreateAPIView):
-    queryset = Cosmeticsshortname.objects.all()
-    serializer_class = CosmeticsshortnameSerializer
+# class DetailCosmeticsshortnameView(generics.RetrieveUpdateAPIView):
+#     serializer_class = DetailCosmeticsshortnameSerializer
+#     http_method_names = ['patch','get']
 
-
-class DetailCosmeticsshortnameView(generics.RetrieveUpdateAPIView):
-    serializer_class = DetailCosmeticsshortnameSerializer
-    http_method_names = ['patch','get']
-
-    def get_queryset(self, *args, **kwargs):
-        qs = Cosmeticsshortname.objects.filter(tradecode=self.kwargs["pk"])
-        return qs
+#     def get_queryset(self, *args, **kwargs):
+#         qs = Cosmeticsshortname.objects.filter(tradecode=self.kwargs["pk"])
+#         return qs
     
-    def patch(self,request, *args, **kwargs):
-        base_response = super(DetailCosmeticsshortnameView, self).patch(request, *args, **kwargs)
-        return base_response
-
-
-class DestoryCosmeticsshortnameView(generics.DestroyAPIView):
-    serializer_class = DetailCosmeticsshortnameSerializer
-
-    def delete(self, request, *args, **kwargs):
-        base_response = super(DestoryCosmeticsshortnameView, self).delete(request, *args, **kwargs)
-        msg = 'Cosmeticsshortname deleted successfully'
-        return Response(msg)
-
-    def get_queryset(self, *args, **kwargs):
-        qs = Cosmeticsshortname.objects.all()
-        return qs
+#     def patch(self,request, *args, **kwargs):
+#         base_response = super(DetailCosmeticsshortnameView, self).patch(request, *args, **kwargs)
+#         return base_response

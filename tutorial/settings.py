@@ -82,10 +82,17 @@ WSGI_APPLICATION = 'tutorial.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    # "default": {
+    #     "ENGINE": "mssql",
+    #     "NAME": "EDA6py",
+    #     "USER": "pyuser",
+    #     "PASSWORD": "otusrP0rdpY$",
+    #     "HOST": "10.10.10.21",
+    #     "PORT": "1433",
+    #     "OPTIONS": {
+    #         "driver": "ODBC Driver 17 for SQL Server", 
+    #     },
+    # },
     "default": {
         "ENGINE": "mssql",
         "NAME": "EDA6py",
@@ -145,3 +152,4 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20
 }
+
