@@ -16,6 +16,7 @@ class CosmeticsshortnameCreate(generics.CreateAPIView):
     queryset = Cosmeticsshortname.objects.all()
     serializer_class = CosmeticsshortnameSerializer
 
+
 class DetailCosmeticsshortnameView(generics.RetrieveUpdateAPIView):
     serializer_class = DetailCosmeticsshortnameSerializer
     http_method_names = ['patch','get']
