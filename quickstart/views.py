@@ -21,7 +21,7 @@ class DetailCosmeticsshortnameView(generics.RetrieveUpdateAPIView):
     http_method_names = ['patch','get']
 
     def get_queryset(self, *args, **kwargs):
-        qs = Cosmeticsshortname.objects.filter(id=self.kwargs["pk"])
+        qs = Cosmeticsshortname.objects.filter(tradecode=self.kwargs["pk"])
         return qs
     
     def patch(self,request, *args, **kwargs):
