@@ -281,7 +281,7 @@ class Product(models.Model):
 
 class ProductDetails(models.Model):
     id = models.DecimalField(db_column='ID', max_digits=12, decimal_places=0,primary_key=True)  # Field name made lowercase.
-    product_id = models.DecimalField(db_column='PRODUCT_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    product_id = models.DecimalField(db_column='PRODUCT_ID', max_digits=12, decimal_places=0)  # Field name made lowercase.
     product_colour = models.CharField(db_column='PRODUCT_COLOUR', max_length=200, blank=True, null=True)  # Field name made lowercase.
     fragrance = models.CharField(db_column='FRAGRANCE', max_length=200, blank=True, null=True)  # Field name made lowercase.
     flavor = models.CharField(db_column='FLAVOR', max_length=200, blank=True, null=True)  # Field name made lowercase.
