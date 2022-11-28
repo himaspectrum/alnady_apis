@@ -297,3 +297,30 @@ class ProductDetails(models.Model):
     class Meta:
         managed = False
         db_table = 'COSM].[PRODUCT_DETAILS'
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
+from django.db import models
+
+
+class ProductBatches(models.Model):
+    _id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    product_id = models.DecimalField(db_column='PRODUCT_ID', max_digits=12, decimal_places=0)  # Field name made lowercase.
+    batch_no = models.CharField(db_column='BATCH_NO', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    production_date = models.DateTimeField(db_column='PRODUCTION_DATE', blank=True, null=True)  # Field name made lowercase.
+    expiration_date = models.DateTimeField(db_column='EXPIRATION_DATE', blank=True, null=True)  # Field name made lowercase.
+    quantity = models.DecimalField(db_column='QUANTITY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    lkup_uom_id = models.DecimalField(db_column='LKUP_UOM_ID', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    created_by = models.DecimalField(db_column='CREATED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    created_date = models.DateTimeField(db_column='CREATED_DATE', blank=True, null=True)  # Field name made lowercase.
+    modified_by = models.DecimalField(db_column='MODIFIED_BY', max_digits=12, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    modified_date = models.DateTimeField(db_column='MODIFIED_DATE', blank=True, null=True)  # Field name made lowercase.
+    f_delete = models.BooleanField(db_column='F_DELETE', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'COSM].[PRODUCT_BATCHES'

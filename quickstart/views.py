@@ -1,10 +1,15 @@
 from pprint import pprint
 from .models import Product,ProductDetails
 from rest_framework import generics
-from .serializers import ProductSerializer,DetailCosmeticsshortnameSerializer
-from django.apps import apps
-import decimal
-class ListProductSerializer(generics.ListAPIView):  
+from .serializers import ProductSerializer,DetailCosmeticsshortnameSerializer,ProductBatchesSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class ProductBatches(generics.CreateAPIView):  
+    serializer_class = ProductBatchesSerializer
+
+
+class ListProduct(generics.ListAPIView):  
     serializer_class = ProductSerializer
 
     def get_queryset(self): 
