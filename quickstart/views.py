@@ -8,6 +8,9 @@ from rest_framework.response import Response
 class ProductBatches(generics.CreateAPIView):  
     serializer_class = ProductBatchesSerializer
 
+    def create(self, request, *args, **kwargs):
+        result = super(ProductBatches, self).create(request, *args, **kwargs)
+        return result 
 
 class ListProduct(generics.ListAPIView):  
     serializer_class = ProductSerializer

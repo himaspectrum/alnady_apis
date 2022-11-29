@@ -308,7 +308,7 @@ from django.db import models
 
 
 class ProductBatches(models.Model):
-    _id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     product_id = models.DecimalField(db_column='PRODUCT_ID', max_digits=12, decimal_places=0)  # Field name made lowercase.
     batch_no = models.CharField(db_column='BATCH_NO', max_length=50, blank=True, null=True)  # Field name made lowercase.
     production_date = models.DateTimeField(db_column='PRODUCTION_DATE', blank=True, null=True)  # Field name made lowercase.
