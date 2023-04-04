@@ -23,8 +23,8 @@ models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
 class TestView(APIView):
     def get(self,request, *args, **kwargs):
-        result = models.execute_kw(db, uid, password, 'res.partner', 'search_read', 
-                   [], {'fields':["id",'name','email']})
+        result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
+                   [], {'fields':["code",'name','user_type_id']})
         # result = self.env["res.users"].search_read([("id", "!=", 0)], fields=["partner_id",'name','email'])
         return Response({'result': result})
 
