@@ -13,9 +13,9 @@ environ.Env.read_env()
 
 
 url = 'http://localhost:8069'
-db = 'alnady'
-username = 'admin'
-password = 'admin'
+db = '6ou'
+username = 'admin@yahoo.com'
+password = '6ou_admin1'
 # password = env('DATABASE_PASS')
 common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
