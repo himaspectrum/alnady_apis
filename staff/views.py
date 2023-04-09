@@ -20,9 +20,11 @@ common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
-class AccountItemsView(APIView):
+class HrPayslipView(APIView):
     def get(self,request, *args, **kwargs):
-        result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
-                   [], {'fields':["code",'name','user_type_id']})
+        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
+                   [], {'fields':["employee_id",'id','line_ids']})
+        print(f'{payslip_list=}')
+        result = True
         return Response({'result': result})
 
