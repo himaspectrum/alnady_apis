@@ -21,10 +21,9 @@ common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
-class TestView(APIView):
+class AccountItemsView(APIView):
     def get(self,request, *args, **kwargs):
         result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
                    [], {'fields':["code",'name','user_type_id']})
-        # result = self.env["res.users"].search_read([("id", "!=", 0)], fields=["partner_id",'name','email'])
         return Response({'result': result})
 
