@@ -23,8 +23,8 @@ models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 class HrPayslipView(APIView):
     def get(self,request, *args, **kwargs):
         payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
-                   [], {'fields':["employee_id",'id','line_ids']})
+                   [], {'fields':["employee_id",'id','line_ids','net_wage']})
         print(f'{payslip_list=}')
         result = True
-        return Response({'result': result})
+        return Response({'result': payslip_list})
 
