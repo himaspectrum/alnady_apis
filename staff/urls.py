@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('all_staff_payments', views.HrPayslipView.as_view(), name='hr_payslip_list'),
-    path('staff_payments_list/<slug:identification_id>/', views.StaffPaymentsList.as_view(), name='hr_payslip_detail'),
+    path('staff_payments_list/<slug:identification_id>/', views.StaffPaymentsList.as_view(), name='staff_payments_list'),
+    path('show_staff_payment_details/<slug:identification_id>/', views.StaffPaymentsList.as_view(), name='show_staff_payment_details'),
 ]

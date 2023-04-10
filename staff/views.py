@@ -19,20 +19,34 @@ common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
-class HrPayslipView(APIView):
-    def get(self,request, *args, **kwargs):
-        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
-                   [], {'fields':["employee_id",'id','line_ids','net_wage']})
-        print(f'{payslip_list=}')
-        result = True
-        return Response({'result': payslip_list})
-
 
 class StaffPaymentsList(APIView):
     def get(self,request, *args, **kwargs):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
         
+        identification_id = kwargs['identification_id']
+
+        employee = models.execute_kw(db, uid, password,'hr.employee', 'search_read',
+                                     [[('identification_id', '=', identification_id)]],
+                                    {'fields': ['id', 'name']})        
+        if employee:
+            employee_id = employee[0]['id']
+        else:
+            message = 'employee not exist'
+            return Response({'result': message})
+        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
+                    [[('employee_id', '=', employee_id)]],
+                    {'fields': ['id', 'name', 'net_wage', 'currency_id'], 'limit': limit, 'offset': offset})   
+        items_count= len(payslip_list)
+        return Response({'result': payslip_list,'items_count':items_count})
+
+
+class ShowStaffPaymentDetails(APIView):
+    def get(self,request, *args, **kwargs):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+
         identification_id = kwargs['identification_id']
 
         employee = models.execute_kw(db, uid, password,'hr.employee', 'search_read',
