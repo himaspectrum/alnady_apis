@@ -20,6 +20,21 @@ uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
 
+class AccountItemsEdit(APIView):
+    def put(self,request,name=None,account_code=None ):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+
+        print(f'{name=}')
+        print(f'{account_code=}')
+
+        result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
+                   [], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
+        items_count= len(result)
+        
+        return Response({'result': result,'items_count':items_count})
+
+
 class AccountItemsList(APIView):
     def get(self,request, *args, **kwargs):
         limit = int(request.query_params.get('limit', 10))
