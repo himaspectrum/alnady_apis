@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import xmlrpc.client
 
+from drf_yasg.utils import swagger_auto_schema
+from .serializers import MyQuerySerializer
+
 # third party
 import environ
 
@@ -21,6 +24,12 @@ models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
 
 class AccountItemsEdit(APIView):
+    @swagger_auto_schema(
+        query_serializer=MyQuerySerializer,
+        responses={200: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
     def put(self,request,name=None,account_code=None ):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
