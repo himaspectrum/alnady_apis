@@ -20,26 +20,16 @@ uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
 
-class StaffPaymentsList(APIView):
+class AccountItemsList(APIView):
     def get(self,request, *args, **kwargs):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
-        
-        identification_id = kwargs['identification_id']
 
-        employee = models.execute_kw(db, uid, password,'hr.employee', 'search_read',
-                                     [[('identification_id', '=', identification_id)]],
-                                    {'fields': ['id', 'name']})        
-        if employee:
-            employee_id = employee[0]['id']
-        else:
-            message = 'employee not exist'
-            return Response({'result': message})
-        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
-                    [[('employee_id', '=', employee_id)]],
-                    {'fields': ['id', 'name', 'net_wage', 'currency_id'], 'limit': limit, 'offset': offset})   
-        items_count= len(payslip_list)
-        return Response({'result': payslip_list,'items_count':items_count})
+        result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
+                   [], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
+        items_count= len(result)
+        
+        return Response({'result': result,'items_count':items_count})
 
 
 class ShowStaffPaymentDetails(APIView):
