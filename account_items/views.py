@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import xmlrpc.client
 
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import MyQuerySerializer
+from .serializers import AccountItemsEditSerializer,AccountItemsListSerializer
 
 # third party
 import environ
@@ -25,7 +25,7 @@ models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
 class AccountItemsEdit(APIView):
     @swagger_auto_schema(
-        query_serializer=MyQuerySerializer,
+        query_serializer=AccountItemsEditSerializer,
         responses={200: 'Success'},
         operation_summary='My View Summary',
         operation_description='My View Description'
@@ -34,8 +34,6 @@ class AccountItemsEdit(APIView):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
 
-        print(f'{name=}')
-        print(f'{account_code=}')
 
         result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
                    [], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
@@ -45,6 +43,12 @@ class AccountItemsEdit(APIView):
 
 
 class AccountItemsList(APIView):
+    @swagger_auto_schema(
+        query_serializer=AccountItemsListSerializer,
+        responses={200: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
     def get(self,request, *args, **kwargs):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
