@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 import xmlrpc.client
 
-
+# schema
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+# third party
 import environ
 
 env = environ.Env()
@@ -27,4 +29,29 @@ class HrPayslipView(APIView):
         print(f'{payslip_list=}')
         result = True
         return Response({'result': payslip_list})
+
+# Define the parameters
+limit_param = openapi.Parameter('limit', openapi.IN_QUERY, description="Limit the number of results returned", type=openapi.TYPE_INTEGER)
+offset_param = openapi.Parameter('offset', openapi.IN_QUERY, description="Skip the first n results", type=openapi.TYPE_INTEGER)
+
+class StaffPaymentsList(APIView):
+    def get(self,request, *args, **kwargs):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+        
+        identification_id = kwargs['identification_id']
+
+        employee = models.execute_kw(db, uid, password,'hr.employee', 'search_read',
+                                     [[('identification_id', '=', identification_id)]],
+                                    {'fields': ['id', 'name']})        
+        if employee:
+            employee_id = employee[0]['id']
+        else:
+            message = 'employee not exist'
+            return Response({'result': message})
+        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
+                    [[('employee_id', '=', employee_id)]],
+                    {'fields': ['id', 'name', 'net_wage', 'currency_id'], 'limit': limit, 'offset': offset})   
+        items_count= len(payslip_list)
+        return Response({'result': payslip_list,'items_count':items_count})
 
