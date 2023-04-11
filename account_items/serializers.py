@@ -6,6 +6,6 @@ class AccountItemsEditSerializer(serializers.Serializer):
 
 class AccountItemsListSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
+    user_type_id = serializers.IntegerField(required=False)
     code = serializers.CharField(required=False)
     name = serializers.CharField(required=False)
-    user_type_id = serializers.IntegerField(required=False)

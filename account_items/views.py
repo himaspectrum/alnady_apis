@@ -53,8 +53,21 @@ class AccountItemsList(APIView):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
 
+        _id = request.query_params.get('id', None)
+        user_type_id = request.query_params.get('user_type_id', None)
+        code = request.query_params.get('code', None)
+        name = request.query_params.get('name', None)
+        domain = []
+        if _id:
+            domain.append(('id', '=',_id))
+        if user_type_id:
+            domain.append(('user_type_id', '=',user_type_id))
+        if code:
+            domain.append(('code', '=',code))
+        if name:
+            domain.append(('name', 'like',name))
         result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
-                   [], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
+                   [domain], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
         items_count= len(result)
         
         return Response({'result': result,'items_count':items_count})
