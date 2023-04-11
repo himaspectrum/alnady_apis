@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import xmlrpc.client
 
+from drf_yasg.utils import swagger_auto_schema
+from .serializers import EditStaffMemberSerializer
+
 # third party
 import environ
 
@@ -19,6 +22,31 @@ common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
+class EditStaffMember(APIView):
+    @swagger_auto_schema(
+        query_serializer=EditStaffMemberSerializer,
+        responses={200: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def put(self,request,name=None,account_code=None ):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+
+        _id = request.query_params.get('id', None)
+        national_id = request.query_params.get('national_id', None)
+        name = request.query_params.get('name', None)
+
+        result = models.execute_kw(db, uid, password, 'hr.employee', 'search_read', 
+                   [[('id', '=',_id)]], {'fields':["id",'name'], 'limit': limit, 'offset': offset})
+        result_id = result[0]['id']
+        if national_id:
+            models.execute_kw(db, uid, password, 'hr.employee', 'write', [[result_id], {'identification_id': national_id}])
+        if name:
+            models.execute_kw(db, uid, password, 'hr.employee', 'write', [[result_id], {'name': name}])
+        result = models.execute_kw(db, uid, password, 'hr.employee', 'search_read', 
+                   [[('id', '=',_id)]], {'fields':["id",'name','identification_id'], 'limit': limit, 'offset': offset})
+        return Response({'result': result})
 
 class StaffPaymentsList(APIView):
     def get(self,request, *args, **kwargs):
