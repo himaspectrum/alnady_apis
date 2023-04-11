@@ -34,12 +34,18 @@ class AccountItemsEdit(APIView):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
 
+        _id = request.query_params.get('id', None)
+        account_code = request.query_params.get('account_code', None)
+        name = request.query_params.get('name', None)
 
         result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
-                   [], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
-        items_count= len(result)
-        
-        return Response({'result': result,'items_count':items_count})
+                   [[('id', '=',_id)]], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
+        result_id = result[0]['id']
+        if account_code:
+            models.execute_kw(db, uid, password, 'account.account', 'write', [[result_id], {'account_code': account_code}])
+        if name:
+            models.execute_kw(db, uid, password, 'account.account', 'write', [[result_id], {'name': name}])
+        return Response({'result': result})
 
 
 class AccountItemsList(APIView):

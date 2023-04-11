@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 class AccountItemsEditSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
     name = serializers.CharField(required=False)
     account_code = serializers.CharField(required=False)
 
