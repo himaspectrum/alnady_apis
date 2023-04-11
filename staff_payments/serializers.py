@@ -8,3 +8,6 @@ class EditStaffMemberSerializer(serializers.Serializer):
 
 class AddStaffMemberSerializer(serializers.Serializer):
     name = serializers.CharField(required=True)
+
+class AllStaffPaymentsListSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)

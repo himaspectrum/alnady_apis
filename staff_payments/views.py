@@ -22,7 +22,7 @@ common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
-class EditStaffMember(APIView):
+class StaffMember(APIView):
     @swagger_auto_schema(
         query_serializer=EditStaffMemberSerializer,
         responses={200: 'Success'},
@@ -61,6 +61,25 @@ class EditStaffMember(APIView):
         }])
         
         return Response({'result':employee_id ,'Status':bool(employee_id)})
+
+
+class AllStaffPaymentsList(APIView):
+    @swagger_auto_schema(
+        query_serializer=EditStaffMemberSerializer,
+        responses={200: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def get(self,request, *args, **kwargs):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+        
+
+        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
+                    [],
+                    {'fields': ['id', 'name', 'net_wage', 'currency_id'], 'limit': limit, 'offset': offset})   
+        items_count= len(payslip_list)
+        return Response({'result': payslip_list,'items_count':items_count})
 
 
 class StaffPaymentsList(APIView):
