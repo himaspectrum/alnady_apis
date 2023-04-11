@@ -5,3 +5,6 @@ class EditStaffMemberSerializer(serializers.Serializer):
     name = serializers.CharField(required=False)
     national_id = serializers.CharField(required=False)
 
+
+class AddStaffMemberSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import xmlrpc.client
 
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import EditStaffMemberSerializer
+from .serializers import EditStaffMemberSerializer,AddStaffMemberSerializer
 
 # third party
 import environ
@@ -47,6 +47,21 @@ class EditStaffMember(APIView):
         result = models.execute_kw(db, uid, password, 'hr.employee', 'search_read', 
                    [[('id', '=',_id)]], {'fields':["id",'name','identification_id'], 'limit': limit, 'offset': offset})
         return Response({'result': result})
+    @swagger_auto_schema(
+        query_serializer=AddStaffMemberSerializer,
+        responses={201: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def post(self,request):
+        name = request.query_params.get('name', None)
+        
+        employee_id = models.execute_kw(db, uid, password, 'hr.employee', 'create', [{
+        'name': name,
+        }])
+        
+        return Response({'result':employee_id ,'Status':bool(employee_id)})
+
 
 class StaffPaymentsList(APIView):
     def get(self,request, *args, **kwargs):
