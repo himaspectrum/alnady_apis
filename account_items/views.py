@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import xmlrpc.client
 
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import AccountItemsEditSerializer,AccountItemsListSerializer
+from .serializers import AccountItemsEditSerializer,AccountItemsListSerializer,AccountItemsAddSerializer
 
 # third party
 import environ
@@ -23,7 +23,26 @@ uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
 
 
-class AccountItemsEdit(APIView):
+class AccountItems(APIView):
+    @swagger_auto_schema(
+        query_serializer=AccountItemsAddSerializer,
+        responses={201: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def post(self,request):
+        code = request.query_params.get('code', None)
+        name = request.query_params.get('name', None)
+        account_types = int(request.query_params.get('account_types', None))
+        try:
+            account_id = models.execute_kw(db, uid, password, 'account.account', 'create', [{
+            'code': code,'name':name,'user_type_id':account_types
+            }])
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+        return Response({'result':account_id ,'Status':bool(account_id)})
+
+
     @swagger_auto_schema(
         query_serializer=AccountItemsEditSerializer,
         responses={200: 'Success'},
