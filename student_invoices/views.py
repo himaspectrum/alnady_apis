@@ -36,11 +36,15 @@ class CreateStudentInvoice(APIView):
         total = request.query_params.get('total', None)
         account_items = request.query_params.get('account_items', None)
         currency = request.query_params.get('currency', None)
-        journal_id = request.query_params.get('journal_id', None)
+        created_date = request.query_params.get('created_date', None)
+        	
+        miscellaneous_operations_id = 3
         try:
             account_id = models.execute_kw(db, uid, password, 'account.move', 'create', [{
-            'ref': invoice_number,'currency_id':currency,'journal_id':journal_id
+            'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
+            'date':created_date
             }])
+            
         except Exception as e:
             return Response({'error': str(e)}, status=500)
         return Response({'result':account_id ,'Status':bool(account_id)})
