@@ -39,13 +39,17 @@ class CreateStudentInvoice(APIView):
         created_date = request.query_params.get('created_date', None)
         	
         miscellaneous_operations_id = 3
-        try:
-            account_id = models.execute_kw(db, uid, password, 'account.move', 'create', [{
-            'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
-            'date':created_date
-            }])
-            
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)
+        # try:
+        account_id = models.execute_kw(db, uid, password, 'account.move', 'create', [{
+        'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
+        'date':created_date
+        }])
+        base_total = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
+                [[('id', '=',account_id)]], {'fields':["id",'name','amount_total_signed'],})[0]['amount_total_signed']
+        if base_total != float(total):
+            return Response({'error': 'total are not equal'}, status=500)
+        
+        # except Exception as e:
+        #     return Response({'error': str(e)}, status=500)
         return Response({'result':account_id ,'Status':bool(account_id)})
 
