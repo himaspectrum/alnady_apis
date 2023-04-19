@@ -33,13 +33,13 @@ class CreateStudentInvoice(APIView):
         operation_description='My View Description'
     )
     def post(self,request):
-        # serializer = CreateStudentInvoiceLinesSerializer(data=request.data)
+        serializer = CreateStudentInvoiceLinesSerializer(data=request.data)
 
-        invoice_number = request.query_params.get('invoice_number', None)
-        total = request.query_params.get('total', None)
-        # account_items = request.query_params.get('account_items', None)
-        currency = request.query_params.get('currency', None)
-        created_date = request.query_params.get('created_date', None)
+        invoice_number = request.data.get('invoice_number', None)
+        total = request.data.get('total', None)
+        account_items = request.data.get('account_items', None)
+        currency = request.data.get('currency', None)
+        created_date = request.data.get('created_date', None)
         	
         miscellaneous_operations_id = 3
         # try:
@@ -47,16 +47,11 @@ class CreateStudentInvoice(APIView):
         'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
         'date':created_date
         }])
-        items = []
-        for item_data in serializer.validated_data:
-            items.append(item_data)
-        print(items)
-            # models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
-            #     'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
-            #     'date':created_date
-            #     }])
+        models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
+            'account_id':miscellaneous_operations_id,'move_id':account_id,**account_items[0],**account_items[1]
+            }])
         base_total = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
-                [[('id', '=',account_id)]], {'fields':["id",'name','amount_total_signed'],})[0]['amount_total_signed']
+                [[('id', '=',account_id)]], {'fields':["id",'name','amount_total_signed','account_id'],})[0]['amount_total_signed']
         if base_total != float(total):
             return Response({'error': 'total are not equal'}, status=500)
         
