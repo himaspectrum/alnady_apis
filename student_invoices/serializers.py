@@ -8,7 +8,6 @@ class CreateStudentInvoiceLinesSerializer(serializers.Serializer):
 
 class CreateStudentInvoiceSerializer(serializers.Serializer):
     invoice_number = serializers.CharField(required=True)
-    total = serializers.FloatField(required=True)
     account_items = CreateStudentInvoiceLinesSerializer(many=True)
     currency = serializers.IntegerField(required=True)
     created_date = serializers.DateTimeField(required=True)

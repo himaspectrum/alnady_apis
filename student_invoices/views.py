@@ -35,7 +35,6 @@ class CreateStudentInvoice(APIView):
     def post(self,request):
 
         invoice_number = request.data.get('invoice_number', None)
-        total = request.data.get('total', None)
         account_items = request.data.get('account_items', None)
         currency = request.data.get('currency', None)
         created_date = request.data.get('created_date', None)
@@ -54,12 +53,11 @@ class CreateStudentInvoice(APIView):
             }], {'context': {'check_move_validity': False}})
 
         
-        base_total = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
-                [[('id', '=',account_move_id)]], {'fields':["id",'name','amount_total_signed'],})[0]['amount_total_signed']
-        if base_total != float(total):
-            return Response({'error': 'total are not equal'}, status=500)
-        
-        # except Exception as e:
-        #     return Response({'error': str(e)}, status=500)
+        account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
+                [[('id', '=',account_move_id)]], {'fields':["id",'name','amount_total_signed'],})
+        try:
+            models.execute_kw(db, uid, password, 'account.move', 'action_post', [[account_move_object[0]['id']]])
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
         return Response({'result':account_move_id ,'Status':bool(account_move_id)})
 
