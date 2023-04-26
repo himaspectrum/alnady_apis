@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import xmlrpc.client
 
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import CreateStudentInvoiceSerializer,CreateStudentInvoiceLinesSerializer
+from .serializers import CreateStudentInvoiceSerializer,CreateStudentInvoiceLinesSerializer,CancelStudentInvoiceSerializer
 
 # third party
 import environ
@@ -22,7 +22,7 @@ password = '6ou_admin1'
 common = xmlrpc.client.ServerProxy('%s/xmlrpc/2/common' % url)
 uid = common.authenticate(db, username, password, {})
 models = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
-
+models.allow_none = True
 
 
 class CreateStudentInvoice(APIView):
@@ -60,4 +60,43 @@ class CreateStudentInvoice(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
         return Response({'result':account_move_id ,'Status':bool(account_move_id)})
+
+
+class CancelStudentInvoice(APIView):
+    @swagger_auto_schema(
+        request_body=CancelStudentInvoiceSerializer,
+        responses={201: 'Created'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def post(self,request):
+
+        invoice_number = request.data.get('invoice_number', None)
+        account_items = request.data.get('account_items', None)
+        currency = request.data.get('currency', None)
+        created_date = request.data.get('created_date', None)
+            
+        miscellaneous_operations_id = 3
+        # try:
+        # account_move_id = models.execute_kw(db, uid, password, 'account.move', 'create', [{
+        # 'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
+        # 'date':created_date
+        # }])
+        # for item in account_items:
+        #     models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
+        #         'account_id': miscellaneous_operations_id,
+        #         'move_id': account_move_id,
+        #         **item
+        #     }], {'context': {'check_move_validity': False}})
+
+        
+
+        # set the account.move record to draft state
+        # result = models.execute_kw(db, uid, password, 'account.move', 'button_draft', [int(invoice_number)])
+        result = models.execute_kw(db, uid, password, 'account.move', 'button_draft', [int(invoice_number)])
+        
+        # models.execute_kw(db, uid, password, 'account.move', 'button_cancel', account_move_object)
+        # except Exception as e:
+        #     return Response({'error': str(e)}, status=500)
+        return Response({'result':result ,'Status':bool(result)})
 
