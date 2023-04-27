@@ -71,32 +71,15 @@ class CancelStudentInvoice(APIView):
     )
     def post(self,request):
 
-        invoice_number = request.data.get('invoice_number', None)
-        account_items = request.data.get('account_items', None)
-        currency = request.data.get('currency', None)
-        created_date = request.data.get('created_date', None)
+        # invoice_number = request.data.get('invoice_number', None)
+        # account_items = request.data.get('account_items', None)
+        # currency = request.data.get('currency', None)
+        # created_date = request.data.get('created_date', None)
             
-        miscellaneous_operations_id = 3
-        # try:
-        # account_move_id = models.execute_kw(db, uid, password, 'account.move', 'create', [{
-        # 'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
-        # 'date':created_date
-        # }])
-        # for item in account_items:
-        #     models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
-        #         'account_id': miscellaneous_operations_id,
-        #         'move_id': account_move_id,
-        #         **item
-        #     }], {'context': {'check_move_validity': False}})
-
+        # miscellaneous_operations_id = 3
         
+        # result=None        
 
-        # set the account.move record to draft state
-        # result = models.execute_kw(db, uid, password, 'account.move', 'button_draft', [int(invoice_number)])
-        result = models.execute_kw(db, uid, password, 'account.move', 'button_draft', [int(invoice_number)])
-        
-        # models.execute_kw(db, uid, password, 'account.move', 'button_cancel', account_move_object)
-        # except Exception as e:
-        #     return Response({'error': str(e)}, status=500)
-        return Response({'result':result ,'Status':bool(result)})
-
+        # models.execute_kw(db, uid, password, 'account.move', 'button_cancel', [int(invoice_number)])
+        # return Response({'result':result ,'Status':bool(result)})
+        ...
