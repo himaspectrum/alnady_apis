@@ -15,5 +15,5 @@ class CreateStudentInvoiceSerializer(serializers.Serializer):
 class CancelStudentInvoiceSerializer(serializers.Serializer):
     invoice_number = serializers.IntegerField(required=True)
     # account_items = CreateStudentInvoiceLinesSerializer(many=True)
-    currency = serializers.IntegerField(required=True)
-    created_date = serializers.DateTimeField(required=True)
+    # currency = serializers.IntegerField(required=True)
+    created_date = serializers.DateField(required=True)

@@ -74,12 +74,13 @@ class CancelStudentInvoice(APIView):
         move_id = request.data.get('invoice_number', None)
         # account_items = request.data.get('account_items', None)
         # currency = request.data.get('currency', None)
-        # created_date = request.data.get('created_date', None)
+        created_date = request.data.get('created_date', None)
             
         miscellaneous_operations_id = 3
         
         reversal = models.execute_kw(db, uid, password, 'account.move.reversal', 'create', [{
             'journal_id': miscellaneous_operations_id,
+            'date': created_date,
             'move_ids': [(4, move_id)],
         }])
 
