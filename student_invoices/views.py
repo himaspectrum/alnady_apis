@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import xmlrpc.client
-
+from datetime import datetime
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import CreateStudentInvoiceSerializer,CreateStudentInvoiceLinesSerializer,CancelStudentInvoiceSerializer
 
@@ -71,21 +71,23 @@ class CancelStudentInvoice(APIView):
     )
     def post(self,request):
 
-        account_move_id = request.data.get('invoice_number', None)
+        move_id = request.data.get('invoice_number', None)
         # account_items = request.data.get('account_items', None)
         # currency = request.data.get('currency', None)
         # created_date = request.data.get('created_date', None)
             
-        # miscellaneous_operations_id = 3
+        miscellaneous_operations_id = 3
         
-        # Create a reverse object in account.move
-        reverse = models.execute_kw(db, uid, password, 'account.move', 'action_reverse', [[account_move_id]])
+        reversal = models.execute_kw(db, uid, password, 'account.move.reversal', 'create', [{
+            'journal_id': miscellaneous_operations_id,
+            'move_ids': [(4, move_id)],
+        }])
 
-        # Pass the reverse object to reverse_moves method of the account.move.reversal model
-        reversal_model = 'account.move.reversal'
-        reversal_method = 'reverse_moves'
-        # 0522
-        reversal_id = models.execute_kw(db, uid, password, reversal_model, reversal_method, [[reverse]])
-        # reversal_id = models.execute_kw(db, uid, password, reversal_model, reversal_method, [[reverse['res_id']]])
-        return Response({'result':reversal_id ,'Status':bool(reversal_id)})
+        # reverse the move
+        result = models.execute_kw(db, uid, password, 'account.move.reversal', 'reverse_moves', [reversal])
+        try:
+            models.execute_kw(db, uid, password, 'account.move', 'action_post', [[result['res_id']]])
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+        return Response({'result':result ,'Status':bool(result)})
         ...
