@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import xmlrpc.client
 from datetime import datetime
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import CreateStudentInvoiceSerializer,CreateStudentInvoiceLinesSerializer,CancelStudentInvoiceSerializer
+from .serializers import CreateStudentInvoiceSerializer,CreateStudentInvoiceLinesSerializer,CancelStudentInvoiceSerializer,AnalyticItemListSerializer
 
 # third party
 import environ
@@ -92,3 +92,23 @@ class CancelStudentInvoice(APIView):
             return Response({'error': str(e)}, status=500)
         return Response({'result':result ,'Status':bool(result)})
         ...
+
+
+class AnalyticItemList(APIView):
+    @swagger_auto_schema(
+        query_serializer=AnalyticItemListSerializer,
+        responses={200: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def get(self,request, *args, **kwargs):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+        
+
+        analytic_item_list = models.execute_kw(db, uid, password, 'account.analytic.line', 'search_read', 
+                    [],
+                    {'limit': limit, 'offset': offset})   
+        items_count= len(analytic_item_list)
+        return Response({'result': analytic_item_list,'items_count':items_count})
+
