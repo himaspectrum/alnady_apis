@@ -71,15 +71,21 @@ class CancelStudentInvoice(APIView):
     )
     def post(self,request):
 
-        # invoice_number = request.data.get('invoice_number', None)
+        account_move_id = request.data.get('invoice_number', None)
         # account_items = request.data.get('account_items', None)
         # currency = request.data.get('currency', None)
         # created_date = request.data.get('created_date', None)
             
         # miscellaneous_operations_id = 3
         
-        # result=None        
+        # Create a reverse object in account.move
+        reverse = models.execute_kw(db, uid, password, 'account.move', 'action_reverse', [[account_move_id]])
 
-        # models.execute_kw(db, uid, password, 'account.move', 'button_cancel', [int(invoice_number)])
-        # return Response({'result':result ,'Status':bool(result)})
+        # Pass the reverse object to reverse_moves method of the account.move.reversal model
+        reversal_model = 'account.move.reversal'
+        reversal_method = 'reverse_moves'
+        # 0522
+        reversal_id = models.execute_kw(db, uid, password, reversal_model, reversal_method, [[reverse]])
+        # reversal_id = models.execute_kw(db, uid, password, reversal_model, reversal_method, [[reverse['res_id']]])
+        return Response({'result':reversal_id ,'Status':bool(reversal_id)})
         ...
