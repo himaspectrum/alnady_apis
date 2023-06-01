@@ -31,6 +31,7 @@ class CreateStudentInvoice(APIView):
         responses={201: 'Created'},
         operation_summary='My View Summary',
         operation_description='My View Description'
+
     )
     def post(self,request):
 
@@ -41,24 +42,56 @@ class CreateStudentInvoice(APIView):
         	
         miscellaneous_operations_id = 3
         # try:
-        account_move_id = models.execute_kw(db, uid, password, 'account.move', 'create', [{
-        'ref': invoice_number,'currency_id':currency,'journal_id':miscellaneous_operations_id,
-        'date':created_date
-        }])
-        for item in account_items:
-            models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
-                'account_id': miscellaneous_operations_id,
-                'move_id': account_move_id,
-                **item
-            }], {'context': {'check_move_validity': False}})
+
+        # journal data 
+        journal_entry_data = {
+            'ref': invoice_number,
+            'journal_id':miscellaneous_operations_id,
+            'date':created_date,
+            'currency_id':currency,
+            
+            
+        }
+        account_move_id = models.execute_kw(db, uid, password, 'account.move', 'create', [journal_entry_data
+        ])
+
+
+        # loop all lines except last one check balnce off
+        for item_index in range(0 , len(account_items) -1):
+             models.execute_kw(db, uid, password, 'account.move.line', 'create',
+                            [{
+                            'move_id': account_move_id, 
+                            **account_items[item_index]  
+                            }],{'context' :{'check_move_validity': False}})
+
+                            # 
+        # last entry check balance   on
+        models.execute_kw(db, uid, password, 'account.move.line', 'create',
+                            [{
+                            'move_id': account_move_id, 
+                            **account_items[-1]  
+                            }],{'context' :{'check_move_validity': True}})
+               
+
+
+
+
+
+        #     models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
+        #         'account_id': miscellaneous_operations_id,
+        #         'move_id': account_move_id,
+        #         **item
+        #     }], {'context': {'check_move_validity': False}})
+        #     print(item)
 
         
-        account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
-                [[('id', '=',account_move_id)]], {'fields':["id",'name','amount_total_signed'],})
-        try:
-            models.execute_kw(db, uid, password, 'account.move', 'action_post', [[account_move_object[0]['id']]])
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)
+        # account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
+        #         [[('id', '=',account_move_id)]], {'fields':["id",'name','amount_total_signed'],})
+        # try:
+        #     models.execute_kw(db, uid, password, 'account.move', 'action_post', [[account_move_object[0]['id']]])
+        # except Exception as e:
+        #     return Response({'error': str(e)}, status=500)
+
         return Response({'result':account_move_id ,'Status':bool(account_move_id)})
 
 
