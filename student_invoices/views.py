@@ -73,24 +73,15 @@ class CreateStudentInvoice(APIView):
                             }],{'context' :{'check_move_validity': True}})
                
 
-
-
-
-
-        #     models.execute_kw(db, uid, password, 'account.move.line', 'create', [{
-        #         'account_id': miscellaneous_operations_id,
-        #         'move_id': account_move_id,
-        #         **item
-        #     }], {'context': {'check_move_validity': False}})
-        #     print(item)
-
         
-        # account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
-        #         [[('id', '=',account_move_id)]], {'fields':["id",'name','amount_total_signed'],})
-        # try:
-        #     models.execute_kw(db, uid, password, 'account.move', 'action_post', [[account_move_object[0]['id']]])
-        # except Exception as e:
-        #     return Response({'error': str(e)}, status=500)
+
+        # post created journal 
+        account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search_read', 
+                [[('id', '=',account_move_id)]], {'fields':["id",'name','amount_total_signed'],})
+        try:
+            models.execute_kw(db, uid, password, 'account.move', 'action_post', [[account_move_object[0]['id']]])
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
 
         return Response({'result':account_move_id ,'Status':bool(account_move_id)})
 
