@@ -94,28 +94,41 @@ class CancelStudentInvoice(APIView):
         operation_description='My View Description'
     )
     def post(self,request):
-
-        move_id = request.data.get('invoice_number', None)
-        # account_items = request.data.get('account_items', None)
-        # currency = request.data.get('currency', None)
+        print(request)
+        invoice_number = request.data.get('invoice_number', None)
+        account_items = request.data.get('account_items', None)
         created_date = request.data.get('created_date', None)
-            
+        currency = request.data.get('currency', None)
+
+        # search by reference 
+        move_ids = models.execute_kw(db,uid, password,'account.move','search',[[['ref','=',invoice_number]]])
+        if not move_ids:
+
+            return Response({"message":'cant find invoice number'},status=404 ) 
+        # reverse journal 
         miscellaneous_operations_id = 3
-        
         reversal = models.execute_kw(db, uid, password, 'account.move.reversal', 'create', [{
             'journal_id': miscellaneous_operations_id,
             'date': created_date,
-            'move_ids': [(4, move_id)],
+            'move_ids': [(4, move_ids[0])],
         }])
+        return Response({'result':reversal , 'message':bool(reversal)})
 
-        # reverse the move
-        result = models.execute_kw(db, uid, password, 'account.move.reversal', 'reverse_moves', [reversal])
-        try:
-            models.execute_kw(db, uid, password, 'account.move', 'action_post', [[result['res_id']]])
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)
-        return Response({'result':result ,'Status':bool(result)})
-        ...
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class AnalyticItemList(APIView):
