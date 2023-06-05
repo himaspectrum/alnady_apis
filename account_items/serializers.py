@@ -33,3 +33,9 @@ class AccountItemsListSerializer(serializers.Serializer):
     user_type_id = serializers.IntegerField(required=False)
     code = serializers.CharField(required=False)
     name = serializers.CharField(required=False)
+
+
+class AnalyticAccountList(serializers.Serializer):
+    limit =serializers.IntegerField(required=False)
+    offset = serializers.IntegerField(required=False)
+    search =serializers.CharField(required=False)

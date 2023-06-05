@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import xmlrpc.client
 
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import AccountItemsEditSerializer,AccountItemsListSerializer,AccountItemsAddSerializer
+from .serializers import AccountItemsEditSerializer,AccountItemsListSerializer,AccountItemsAddSerializer ,AnalyticAccountList
 
 # third party
 import environ
@@ -119,4 +119,23 @@ class ShowStaffPaymentDetails(APIView):
         items_count= len(payslip_details)
         payslip_details[0].update({'line_ids':payslip_lines})
         return Response({'result': payslip_details,'items_count':items_count})
+
+
+
+
+class AnalyticitemList(APIView):
+
+    @swagger_auto_schema(
+        query_serializer=AnalyticAccountList,
+        responses={200: 'Success'},
+        operation_summary='My View Summary',
+        operation_description='My View Description'
+    )
+    def get(self,request, *args, **kwargs):
+        limit = int(request.query_params.get('limit', 10))
+        offset = int(request.query_params.get('offset', 0))
+        search_word = request.query_params.get('serach',"b")
+        analytic_items = models.execute_kw(db,uid , password ,'account.account','search_read',[[('name' , 'like' , search_word)]],{'fields':["id",'name'],'limit': limit, 'offset': offset})
+        item_count = len(analytic_items)
+        return Response({'count':item_count,'items':analytic_items})
 
