@@ -83,12 +83,10 @@ class AllStaffPaymentsList(APIView):
             domain.append(('name','like',search))
 
 
-
-        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read',  [domain],{'fields': ['id', 'name','department_id']})   
+        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read',  [domain],{'fields': ['id', 'name','department_id','employee_id']})   
+        # payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read',  [domain],{'fields':['employee_id']})   
         items_count= len(payslip_list)
         return Response({'result': payslip_list,'items_count':items_count})
-
-        return Response({'result':"aslkdjl"})
 
 
 class StaffPaymentsList(APIView):
@@ -100,7 +98,7 @@ class StaffPaymentsList(APIView):
 
         employee = models.execute_kw(db, uid, password,'hr.employee', 'search_read',
                                      [[('identification_id', '=', identification_id)]],
-                                    {'fields': ['id', 'name']})        
+                                    {'fields': ['id', 'name']})      
         if employee:
             employee_id = employee[0]['id']
         else:
@@ -110,7 +108,9 @@ class StaffPaymentsList(APIView):
                     [[('employee_id', '=', employee_id)]],
                     {'fields': ['id', 'name', 'net_wage', 'currency_id'], 'limit': limit, 'offset': offset})   
         items_count= len(payslip_list)
+
         return Response({'result': payslip_list,'items_count':items_count})
+        # return Response({'result':"dfghjk"})
 
 
 class ShowStaffPaymentDetails(APIView):
