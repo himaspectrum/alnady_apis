@@ -73,13 +73,22 @@ class AllStaffPaymentsList(APIView):
     def get(self,request, *args, **kwargs):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
-        
+        department_id = int(request.query_params.get('department_id', 0))
+        search = request.query_params.get('search', 0)
 
-        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read', 
-                    [],
-                    {'fields': ['id', 'name', 'net_wage', 'currency_id'], 'limit': limit, 'offset': offset})   
+        domain=[]
+        if department_id:
+            domain.append(('department_id',"=",department_id))
+        if search :
+            domain.append(('name','like',search))
+
+
+
+        payslip_list = models.execute_kw(db, uid, password, 'hr.payslip', 'search_read',  [domain],{'fields': ['id', 'name','department_id']})   
         items_count= len(payslip_list)
         return Response({'result': payslip_list,'items_count':items_count})
+
+        return Response({'result':"aslkdjl"})
 
 
 class StaffPaymentsList(APIView):
