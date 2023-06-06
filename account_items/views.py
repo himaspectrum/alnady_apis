@@ -50,13 +50,14 @@ class AccountItems(APIView):
         operation_summary='My View Summary',
         operation_description='My View Description'
     )
+    # update account item
     def put(self,request,name=None,account_code=None ):
-        limit = int(request.query_params.get('limit', 10))
-        offset = int(request.query_params.get('offset', 0))
+        limit = int(request.data.get('limit', 10))
+        offset = int(request.data.get('offset', 0))
 
-        _id = request.query_params.get('id', None)
-        account_code = request.query_params.get('account_code', None)
-        name = request.query_params.get('name', None)
+        _id = request.data.get('id', None)
+        account_code = request.data.get('account_code', None)
+        name = request.data.get('name', None)
 
         result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
                    [[('id', '=',_id)]], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
