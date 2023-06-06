@@ -100,3 +100,24 @@ class  StudentInvoiceTransaction(APIView):
         } })
 
 
+class StudentInvoiceTransactionRefund(APIView):
+
+
+    def post(self, request):
+        # create journal entry 
+        paid_amount =int( request.data.get("amount"))
+        account_id =int( request.data.get("account"))
+        bank_id = int(request.data.get('bank_id'))
+
+        
+        miscellaneous_operations_id=3
+        journal_entry_data = {
+            'journal_id':miscellaneous_operations_id,
+            
+        }
+        move_id = models.execute_kw(db,uid, password,'account.move','create',[journal_entry_data])
+        line = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":move_id,"debit":paid_amount,'account_id':account_id}],{'context' :{'check_move_validity': False}})
+        line2 = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":move_id,"credit":paid_amount,'account_id':bank_id}],{'context' :{'check_move_validity': True}})
+
+
+        return Response({"result":move_id})
