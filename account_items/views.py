@@ -30,10 +30,11 @@ class AccountItems(APIView):
         operation_summary='My View Summary',
         operation_description='My View Description'
     )
+    # account item create 
     def post(self,request):
-        code = request.query_params.get('code', None)
-        name = request.query_params.get('name', None)
-        account_types = int(request.query_params.get('account_types', None))
+        code = request.data.get('code', None)
+        name = request.data.get('name', None)
+        account_types = int(request.data.get('account_types', None))
         try:
             account_id = models.execute_kw(db, uid, password, 'account.account', 'create', [{
             'code': code,'name':name,'user_type_id':account_types
