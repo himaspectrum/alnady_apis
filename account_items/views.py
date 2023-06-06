@@ -61,10 +61,13 @@ class AccountItems(APIView):
                    [[('id', '=',_id)]], {'fields':["code",'name','user_type_id'], 'limit': limit, 'offset': offset})
         result_id = result[0]['id']
         if account_code:
-            models.execute_kw(db, uid, password, 'account.account', 'write', [[result_id], {'account_code': account_code}])
+          re1=  models.execute_kw(db, uid, password, 'account.account', 'write', [[result_id], {'account_code': account_code}])
         if name:
-            models.execute_kw(db, uid, password, 'account.account', 'write', [[result_id], {'name': name}])
-        return Response({'result': result})
+           re1 =  models.execute_kw(db, uid, password, 'account.account', 'write', [[result_id], {'name': name}])
+
+        final_result = models.execute_kw(db, uid, password, 'account.account', 'search_read', 
+                   [[('id', '=',_id)]],{'fields':["code",'name','user_type_id']} )
+        return Response({'result': final_result})
 
 
 class AccountItemsList(APIView):
