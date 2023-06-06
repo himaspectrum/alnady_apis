@@ -52,4 +52,51 @@ class BankList(APIView):
         return Response({'result': result,'items_count':items_count})
 
 
+class  StudentInvoiceTransaction(APIView):
+    def post(self,request):
+        miscellaneous_operations_id=3
+        # get lines by invoice numbe/r
+        invoice_number = request.data.get('invoice_number')
+        account_id = int(request.data.get('account'))
+        paid_amount = int(request.data.get('amount'))
+        bank_id = int(request.data.get('bank_id'))
+
+
+        move_id = models.execute_kw(db,uid, password,'account.move','search',[[('ref',"=",invoice_number)]])
+        print(move_id)
+
+        lines  = models.execute_kw(db,uid, password,'account.move.line','search_read',[[("move_id",'=',move_id)]])
+        
+        debit_accounts = [line for line in lines if int(line.get('debit'))  >  0]
+        credit_accounts = [line for line in lines if int(line.get('credit'))  >  0]
+        journal_entry_data = {
+            'journal_id':miscellaneous_operations_id,
+            
+        }
+
+        cr_move_id = models.execute_kw(db,uid, password,'account.move','create',[journal_entry_data])
+        
+        print("mmmmm/mmmmmmmmmm", cr_move_id)
+        #
+        pre_depit_account = debit_accounts[0]
+        pre_credit_account = credit_accounts[0]
+
+
+        #  bank entry
+        cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"debit":paid_amount,'account_id':bank_id}],{'context' :{'check_move_validity': False}})
+        cr_lines2 = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"credit":paid_amount,'account_id':pre_depit_account.get('account_id')[0]}],{'context' :{'check_move_validity': True}})
+
+
+        # ather entry
+        cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"debit":paid_amount,'account_id':pre_credit_account['account_id'][0]}],{'context' :{'check_move_validity': False}})
+        cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"credit":paid_amount,'account_id':account_id}],{'context' :{'check_move_validity': True}})
+        
+
+
+
+
+        return Response({"status":True,"message":{
+            "id":cr_move_id
+        } })
+
 
