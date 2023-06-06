@@ -38,15 +38,15 @@ class BankList(APIView):
         _id = request.query_params.get('id', None)
         bic = request.query_params.get('bic', None)
         name = request.query_params.get('name', None)
-        domain = []
+        domain = [('type', "=" , "bank")]
         if _id:
             domain.append(('id', '=',_id))
         if bic:
             domain.append(('bic', '=',bic))
         if name:
             domain.append(('name', 'like',name))
-        result = models.execute_kw(db, uid, password, 'res.bank', 'search_read', 
-                   [domain], {'fields':["bic",'name','id'], 'limit': limit, 'offset': offset})
+        result = models.execute_kw(db, uid, password, 'account.journal', 'search_read', 
+                   [domain],{"fields":["id",'name','code']} )
         items_count= len(result)
         
         return Response({'result': result,'items_count':items_count})
