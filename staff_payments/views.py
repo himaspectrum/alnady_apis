@@ -53,14 +53,25 @@ class StaffMember(APIView):
         operation_summary='My View Summary',
         operation_description='My View Description'
     )
+
+    # create employess
+
     def post(self,request):
-        name = request.query_params.get('name', None)
+        name = request.data.get('name', None)
+        national_id = request.data.get('national_id', None)
+        department_id =request.data.get('department_id', None)
+
         
         employee_id = models.execute_kw(db, uid, password, 'hr.employee', 'create', [{
         'name': name,
+        'identification_id':national_id,
+        'department_id':department_id
+
         }])
         
-        return Response({'result':employee_id ,'Status':bool(employee_id)})
+        created_employee  = models.execute_kw(db,uid,password , "hr.employee",'search_read',[[('id','=',employee_id)]],{'fields':['name',"department_id",'identification_id']})
+
+        return Response({'Status':bool(employee_id),'result':created_employee[0] })
 
 
 class AllStaffPaymentsList(APIView):
