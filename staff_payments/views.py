@@ -29,13 +29,15 @@ class StaffMember(APIView):
         operation_summary='My View Summary',
         operation_description='My View Description'
     )
-    def put(self,request,name=None,account_code=None ):
-        limit = int(request.query_params.get('limit', 10))
-        offset = int(request.query_params.get('offset', 0))
 
-        _id = request.query_params.get('id', None)
-        national_id = request.query_params.get('national_id', None)
-        name = request.query_params.get('name', None)
+    # update employee data 
+    def put(self,request,name=None,account_code=None ):
+        limit = int(request.data.get('limit', 10))
+        offset = int(request.data.get('offset', 0))
+
+        _id = int(request.data.get('id', None))
+        national_id = request.data.get('national_id', None)
+        name = request.data.get('name', None)
 
         result = models.execute_kw(db, uid, password, 'hr.employee', 'search_read', 
                    [[('id', '=',_id)]], {'fields':["id",'name'], 'limit': limit, 'offset': offset})
