@@ -76,8 +76,7 @@ class  StudentInvoiceTransaction(APIView):
 
         cr_move_id = models.execute_kw(db,uid, password,'account.move','create',[journal_entry_data])
         
-        print("mmmmm/mmmmmmmmmm", cr_move_id)
-        #
+    
         pre_depit_account = debit_accounts[0]
         pre_credit_account = credit_accounts[0]
 
