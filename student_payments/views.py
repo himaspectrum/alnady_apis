@@ -32,8 +32,8 @@ class BankList(APIView):
         operation_description='My View Description'
     )
     def get(self,request, *args, **kwargs):
-        limit = int(request.query_params.get('limit', 10))
-        offset = int(request.query_params.get('offset', 0))
+        # limit = int(request.query_params.get('limit', 10))
+        # offset = int(request.query_params.get('offset', 0))
 
         _id = request.query_params.get('id', None)
         bic = request.query_params.get('bic', None)
@@ -42,7 +42,7 @@ class BankList(APIView):
         if _id:
             domain.append(('id', '=',_id))
         if bic:
-            domain.append(('bic', '=',bic))
+            domain.append(('code', 'like',bic))
         if name:
             domain.append(('name', 'like',name))
         result = models.execute_kw(db, uid, password, 'account.journal', 'search_read', 
