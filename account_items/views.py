@@ -141,10 +141,7 @@ class AnalyticitemList(APIView):
         limit = int(request.query_params.get('limit', 10))
         offset = int(request.query_params.get('offset', 0))
         search_word = request.query_params.get('search',"")
-        print("hello there ",search_word)
-        print("hello there ",limit)
-        print("hello there ",offset)
-        analytic_items = models.execute_kw(db,uid , password ,'account.account','search_read',[[('name' , 'like' , search_word)]],{'fields':["id",'name'],'limit': limit, 'offset': offset})
+        analytic_items = models.execute_kw(db,uid , password ,'account.analytic.account','search_read',[[('name' , 'like' , search_word)]],{'fields':["id",'name'],'limit': limit, 'offset': offset})
         item_count = len(analytic_items)
         return Response({'count':item_count,'items':analytic_items})
 
