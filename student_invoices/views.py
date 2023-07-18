@@ -52,7 +52,7 @@ class CreateStudentInvoice(APIView):
 
         # journal data 
         journal_entry_data = {
-            'invoice_number': invoice_number,
+            'ref': invoice_number,
             'journal_id':miscellaneous_operations_id,
             'date':created_date,
             'currency_id':currency,
