@@ -54,6 +54,7 @@ class BankList(APIView):
 
 class  StudentInvoiceTransaction(APIView):
     def post(self,request):
+        print("invoice transaction create ")
         miscellaneous_operations_id=3
         # get lines by invoice numbe/r
         invoice_number = request.data.get('invoice_number')
@@ -63,12 +64,19 @@ class  StudentInvoiceTransaction(APIView):
 
 
         move_id = models.execute_kw(db,uid, password,'account.move','search',[[('ref',"=",invoice_number)]])
+        
+        print("move id" , move_id)
+        
+        if  move_id:
+            return Response({'invoice already exist'},status=500)
+       
 
         lines  = models.execute_kw(db,uid, password,'account.move.line','search_read',[[("move_id",'=',move_id)]])
         
         # debit_accounts = [line for line in lines if int(line.get('debit'))  >  0]
         # credit_accounts = [line for line in lines if int(line.get('credit'))  >  0]
         journal_entry_data = {
+            'ref':invoice_number,
             'journal_id':miscellaneous_operations_id,
             
         }
