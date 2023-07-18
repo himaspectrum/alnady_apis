@@ -34,7 +34,7 @@ class CreateStudentInvoice(APIView):
 
     )
     def post(self,request):
-
+        print("____________________here ")
         invoice_number = request.data.get('invoice_number', None)
         account_items = request.data.get('account_items', None)
         currency = request.data.get('currency', None)
@@ -87,14 +87,8 @@ class CreateStudentInvoice(APIView):
 
 
 class CancelStudentInvoice(APIView):
-    @swagger_auto_schema(
-        request_body=CancelStudentInvoiceSerializer,
-        responses={201: 'Created'},
-        operation_summary='My View Summary',
-        operation_description='My View Description'
-    )
+   
     def post(self,request):
-        print(request)
         invoice_number = request.data.get('invoice_number', None)
         account_items = request.data.get('account_items', None)
         created_date = request.data.get('created_date', None)

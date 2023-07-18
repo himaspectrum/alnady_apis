@@ -63,12 +63,11 @@ class  StudentInvoiceTransaction(APIView):
 
 
         move_id = models.execute_kw(db,uid, password,'account.move','search',[[('ref',"=",invoice_number)]])
-        print(move_id)
 
         lines  = models.execute_kw(db,uid, password,'account.move.line','search_read',[[("move_id",'=',move_id)]])
         
-        debit_accounts = [line for line in lines if int(line.get('debit'))  >  0]
-        credit_accounts = [line for line in lines if int(line.get('credit'))  >  0]
+        # debit_accounts = [line for line in lines if int(line.get('debit'))  >  0]
+        # credit_accounts = [line for line in lines if int(line.get('credit'))  >  0]
         journal_entry_data = {
             'journal_id':miscellaneous_operations_id,
             
@@ -77,18 +76,18 @@ class  StudentInvoiceTransaction(APIView):
         cr_move_id = models.execute_kw(db,uid, password,'account.move','create',[journal_entry_data])
         
     
-        pre_depit_account = debit_accounts[0]
-        pre_credit_account = credit_accounts[0]
+        # pre_depit_account = debit_accounts[0]
+        # pre_credit_account = credit_accounts[0]
 
 
         #  bank entry
         cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"debit":paid_amount,'account_id':bank_id}],{'context' :{'check_move_validity': False}})
-        cr_lines2 = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"credit":paid_amount,'account_id':pre_depit_account.get('account_id')[0]}],{'context' :{'check_move_validity': True}})
+        cr_lines2 = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"credit":paid_amount,'account_id':account_id}],{'context' :{'check_move_validity': True}})
 
 
         # ather entry
-        cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"debit":paid_amount,'account_id':pre_credit_account['account_id'][0]}],{'context' :{'check_move_validity': False}})
-        cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"credit":paid_amount,'account_id':account_id}],{'context' :{'check_move_validity': True}})
+        # cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"debit":paid_amount,'account_id':pre_credit_account['account_id'][0]}],{'context' :{'check_move_validity': False}})
+        # cr_lines = models.execute_kw(db,uid, password,'account.move.line','create',[{"move_id":cr_move_id,"credit":paid_amount,'account_id':account_id}],{'context' :{'check_move_validity': True}})
         
 
 
