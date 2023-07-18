@@ -40,12 +40,19 @@ class CreateStudentInvoice(APIView):
         currency = request.data.get('currency', None)
         created_date = request.data.get('created_date', None)
         	
+    #    check_account_itmem_before 
+        ref =account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search', 
+                [[('invoice_number', '=',invoice_number)]], )
+        if ref :
+            return Response({'invoice_number already exist with same name'} , status=500)
+
+
         miscellaneous_operations_id = 3
         # try:
 
         # journal data 
         journal_entry_data = {
-            'ref': invoice_number,
+            'invoice_number': invoice_number,
             'journal_id':miscellaneous_operations_id,
             'date':created_date,
             'currency_id':currency,

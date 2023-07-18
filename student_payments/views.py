@@ -36,7 +36,7 @@ class BankList(APIView):
         # offset = int(request.query_params.get('offset', 0))
 
         _id = request.query_params.get('id', None)
-        bic = request.query_params.get('bic', None)
+        bic = request.query_params.get('code', None)
         name = request.query_params.get('name', None)
         domain = [('type', "=" , "bank")]
         if _id:
