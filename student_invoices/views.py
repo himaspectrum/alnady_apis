@@ -42,7 +42,7 @@ class CreateStudentInvoice(APIView):
         	
     #    check_account_itmem_before 
         ref =account_move_object = models.execute_kw(db, uid, password, 'account.move', 'search', 
-                [[('invoice_number', '=',invoice_number)]], )
+                [[('ref', '=',invoice_number)]], )
         if ref :
             return Response({'invoice_number already exist with same name'} , status=500)
 
